@@ -76,7 +76,99 @@
 %----------------------------------------------------------------------------------------
 
 \section*{Problem 1}
-According to Tardos book, there is 
+\textbf{(a)}. According to Tardos book, under the case that $k = n$, there is \\
+\begin{align*} 
+\begin{split}
+Pr[X_i > c] &< \left( \frac{e^{c-1}}{c} \right)^c < \left( \frac{e}{c} \right)^c = \left( \frac{1}{\gamma(n)} \right)^{e\gamma(n)} < \left( \frac{1}{\gamma(n)} \right)^{2\gamma(n)} = \frac{1}{n^2}
+\end{split}					
+\end{align*}
+By definition, $X_i$ is $|B(j)|$. Thus \\
+\begin{align*} 
+\begin{split}
+Pr[ \ |B(j)| > c \ ] &< \frac{1}{n^2} \ \bigg|_{c \ = \ \Theta(\frac{log(n)}{loglog(n)})}
+\end{split}					
+\end{align*}
+Applying the union bound over this upper bound for $|B(1)|, |B(2)|, ..., |B(n)|$, there is following \\
+\begin{align*} 
+\begin{split}
+Pr[ \ |B(*)| > c \ ] &< \frac{1}{n} \ \bigg|_{c \ = \ \Theta(\frac{log(n)}{loglog(n)})}
+\end{split}					
+\end{align*}
+In words, it means that with probability at least $1 - \frac{1}{n}$, $max_j\{|B(j)|\}$ will not exceed
+$\Theta(\frac{log(n)}{loglog(n)})$.
+\\
+
+\textbf{(b)}. By definition, $|B(i)| = Y = \sum_{j \in [n]} Y_j$, thus $Var[|B(i)|] = Var[Y]$. And there is \\
+\begin{align*} 
+\begin{split}
+Var[Y] &= \mathbb{E}[Y^2] - (\mathbb{E}[Y])^2 \\
+&= \mathbb{E}[(\sum_{j \in [n]} Y_j)^2] - (\mathbb{E}[\sum_{j \in [n]} Y_j])^2 \\
+&= \mathbb{E}[(\sum_{j \in [n]} Y_j)^2] - (\sum_{j \in [n]} \mathbb{E}[Y_j])^2 \\
+&= \mathbb{E}[(\sum_{j \in [n]} Y_j)^2] - n \times \frac{1}{n} \\
+&= \mathbb{E}[\sum_{j \in [n]}\sum_{i \in [n]} Y_iY_j] - 1 \\
+&= \mathbb{E}[\sum_{j \in [n]} Y_i^2 + \sum_{j \in [n]}\sum_{i \in [n], i \neq j} Y_iY_j] - 1 \\
+&= \sum_{j \in [n]}\mathbb{E}[Y_i^2] + \sum_{j \in [n]}\sum_{i \in [n], i \neq j}\mathbb{E}[Y_iY_j] -1 \\
+&= \sum_{j \in [n]}\mathbb{E}[Y_i] + \sum_{j \in [n]}\sum_{i \in [n], i \neq j}\mathbb{E}[Y_i]\mathbb{E}[Y_j] -1 \\
+&= n \times \frac{1}{n} + \frac{n(n-1)}{2} \times 2 \times \frac{1}{n^2} -1 \\
+&= \frac{n-1}{n} \\
+&= 1 - \frac{1}{n}
+\end{split}					
+\end{align*}
+As we can see, with $n \to \infty$, $Var[Y] \to 1$. And for any $n$, $Var[Y] \leqslant 1$. \\
+That is, $Var[|B(i)|] = O(1)$.
+\\
+
+\textbf{(c)}. The Chebyshev's inequality gives
+\begin{align*} 
+\begin{split}
+Pr[|X-\mu| \geqslant k\delta] \leqslant \frac{1}{k^2}
+\end{split}					
+\end{align*}
+We can replace $X = |B(j)|$, $\mu = 1$ and $\delta = \sqrt{\frac{n-1}{n}}$.
+\begin{align*} 
+\begin{split}
+&Pr[|\ |B(j)|-1\ | \geqslant k\sqrt{\frac{n-1}{n}}] \leqslant \frac{1}{k^2} \\
+&Pr[|B(j)| \geqslant 1+k\sqrt{\frac{n-1}{n}} \ or \ |B(j)| \leqslant 1-k\sqrt{\frac{n-1}{n}}] \leqslant \frac{1}{k^2} \\
+&Pr[|B(j)| \geqslant 1+k\sqrt{\frac{n-1}{n}}] + Pr[|B(j)| \leqslant 1-k\sqrt{\frac{n-1}{n}}] \leqslant \frac{1}{k^2} \\
+&Pr[|B(j)| \geqslant 1+k\sqrt{\frac{n-1}{n}}] + 0 \bigg|_{1-k\sqrt{\frac{n-1}{n}} \textless 0} \leqslant \frac{1}{k^2} \\
+&Pr[|B(j)| \geqslant 1+k\sqrt{\frac{n-1}{n}}] \leqslant \frac{1}{k^2} \bigg|_{k \textgreater \sqrt{\frac{n}{n-1}}} \\
+\end{split}					
+\end{align*}
+If we make $k^2 = 100n$, solve for k, we get $k = 10\sqrt{n}$. See that for $n \geqslant 2$, $10\sqrt{n} \textgreater \sqrt{\frac{n}{n-1}}$ holds. When $n = 1$, the input and output set both contain only one element, so essentially it becomes deterministic one-to-one mapping, the probability $Pr[|B(j)|>1]=0$.
+We can make sure that condition $k \textgreater \sqrt{\frac{n}{n-1}}$ is satisfied. \\
+
+Replace $k = 10\sqrt{n}$:
+\begin{align*} 
+\begin{split}
+Pr[|B(j)| \geqslant 1+10\sqrt{n-1}] \leqslant \frac{1}{100n}
+\end{split}					
+\end{align*}
+And it is easy to see that:
+\begin{align*} 
+\begin{split}
+Pr[|B(j)| \textgreater c\sqrt{n}] \leqslant \frac{1}{100n} \ \bigg|_{c\sqrt{n} \ \textgreater \ 1+10\sqrt{n-1}}
+\end{split}					
+\end{align*}
+Solve for c in $c\sqrt{n} \ \textgreater \ 1+10\sqrt{n-1}$, we get $c \textgreater \frac{1}{\sqrt{n}} + 10\sqrt{\frac{n-1}{n}}$. \\
+Note that $c > 1 \ \bigg|_{n=1}$ and $c > 10 \ \bigg|_{n \to \infty}$. \\
+To sum up, for every fixed $j \in [k=n]$, there is
+\begin{align*} 
+\begin{split}
+Pr[|B(j)| \textgreater c\sqrt{n}] \leqslant \frac{1}{100n} \ \bigg|_{c \ \textgreater \ 10}
+\end{split}					
+\end{align*}
+Applying the union bound over this upper bound for $|B(1)|, |B(2)|, ..., |B(n)|$, we get
+\begin{align*} 
+\begin{split}
+Pr[\forall j \in [n]: |B(j)| \textgreater c\sqrt{n}] \leqslant \frac{1}{100} \ \bigg|_{c \ \textgreater \ 10}
+\end{split}					
+\end{align*}
+Flip it over, we have
+\begin{align*} 
+\begin{split}
+Pr[\forall j \in [n]: |B(j)| \leqslant c\sqrt{n}] \geqslant \frac{99}{100} \ \bigg|_{c \ \textgreater \ 10}
+\end{split}					
+\end{align*}
 \\
 
 
