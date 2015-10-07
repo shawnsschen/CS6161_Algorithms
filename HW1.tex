@@ -230,7 +230,41 @@ Pr[h_l(x) = k \land h_l(x') = m] &= Pr[ax+b=k \ \land \ ax'+b=m \  (mod\ 2^k)] \
 Thus, $h_l(x)$ and $h_l(x')$ are pairwise independent for $x \neq x'$. \\
 And $H=\{ h_l(x)=ax+b \ mod\ 2^k\ |\ a,b \in \{0,1\}^k \}$ is a pairwise uniform family from $\{0,1\}^k$ to itself. \\
 
-(c).
+\textbf{(c)}. For the case $m \textless n = k$, sample $l$ from $\{0,1\}^{2k}$, where $l$ has $2k=2n$ bits. Then slice $l$ into two pieces.
+Assign ($1$st bit, $n$th bit) to $a$ and ($(n+1)$th bit, $(2n)$th bit) to $b$ such that $a,b \in \{0,1\}^n$. \\
+We can still construct a family of hash functions $H=\{ h_l(x)=ax+b \ mod \ 2^n\ |\ a,b \in \{0,1\}^n \}$. \\
+Note that $ax \in \{0,1\}^{m+n}$ and thus $ax+b \in \{0,1\}^{m+n}$ where
+$m+n \textgreater n$. The input $x \in \{0,1\}^m$ is automatically padded to $\{0,1\}^{m+n}$. After the $mod \ 2^n$, the output is mapped into $\{0,1\}^n$. \\
+
+For any $x,x' \in \{0,1\}^m, x \neq x'$,
+\begin{align*} 
+\begin{split}
+Pr[h_l(x) = r \land h_l(x') = s] &= Pr[ax+b=r \ \land \ ax'+b=s \  (mod\ 2^n)] \\
+&= Pr[a=\frac{1}{(x-x')}r - \frac{1}{(x-x')}s\ \land \ b=\frac{-x}{(x-x')}r + \frac{x'}{(x-x')}s\  (mod\ 2^n)] \\
+&= Pr[a=\frac{1}{(x-x')}r - \frac{1}{(x-x')}s\  (mod\ 2^n)] \\
+&\quad \times Pr[b=\frac{-x}{(x-x')}r + \frac{x'}{(x-x')}s\  (mod\ 2^n)] \\
+&= \frac{1}{2^n} \times \frac{1}{2^n} \\
+&= \frac{1}{2^{2n}}
+\end{split}					
+\end{align*}
+Thus, $h_l(x)$ and $h_l(x')$ are pairwise independent for $x \neq x'$. And $H=\{ h_l(x)=ax+b \ mod\ 2^n\ |\ a,b \in \{0,1\}^n \}$ is a pairwise independent family from $\{0,1\}^m$ to $\{0,1\}^n$. \\
+
+For the case $n \textless m = k$, sample $l$ from $\{0,1\}^{2k}$, where $l$ has $2k=2m$ bits. Then slice $l$ into two pieces.
+Assign ($1$st bit, $m$th bit) to $a$ and ($(m+1)$th bit, $(2m)$th bit) to $b$ such that $a,b \in \{0,1\}^m$. \\
+We can still construct a family of hash functions $H=\{ h_l(x)=ax+b \ mod \ 2^n\ |\ a,b \in \{0,1\}^m \}$. \\
+Note that $ax \in \{0,1\}^{2m}$ and thus $ax+b \in \{0,1\}^{2m}$ where
+$2m \textgreater n$. The input $x \in \{0,1\}^m$ shrinks to $\{0,1\}^n$ after the $mod \ 2^n$. \\
+
+For any $x,x' \in \{0,1\}^m, x \neq x'$,
+\begin{align*} 
+\begin{split}
+Pr[h_l(x) = r \land h_l(x') = s] &= Pr[ax+b=r \ \land \ ax'+b=s \  (mod\ 2^n)] \\
+&= Pr[ax+b=r \  (mod\ 2^n)] \times Pr[ax'+b=s \ (mod\ 2^n)] \\
+&= \frac{1}{2^n} \times \frac{1}{2^n} \\
+&= \frac{1}{2^{2n}}
+\end{split}					
+\end{align*}
+Thus, $h_l(x)$ and $h_l(x')$ are pairwise independent for $x \neq x'$. And $H=\{ h_l(x)=ax+b \ mod\ 2^n\ |\ a,b \in \{0,1\}^m \}$ is a pairwise independent family from $\{0,1\}^m$ to $\{0,1\}^n$. \\
 \\
 
 
