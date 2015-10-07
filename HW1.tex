@@ -239,7 +239,47 @@ And $H=\{ h_l(x)=ax+b \ mod\ 2^k\ |\ a,b \in \{0,1\}^k \}$ is a pairwise uniform
 %----------------------------------------------------------------------------------------
 
 \section*{Problem 3}
-haha
+\textbf{(a)}. Given the fact that $\forall t: Enc(t)=c_t \in \{0,1\}^{n-1}$ is a unique encoding,
+$t_1 = t_2$ iff $Enc(t_1)=Enc(t_2)$. \\
+
+Then if $c=c'$, $Enc(t_{x,y})=Enc(t_{x',y'})$ and thus $t_{x,y}=t_{x',y'}$. \\
+By definition, $t_{x,y}=(A_1, B_1, A_2, B_2, ..., A_t, B_t)$ and
+$t_{x',y'}=(A'_1, B'_1, A'_2, B'_2, ..., A'_t, B'_t)$ where $A_i \in x, A'_i \in x', B_i \in y, B'_i \in y'$.
+$A_i, A'_i, B_i, B'_i$ are pieces of information from Alice and Bob's databases. \\
+
+Based on $(A_1, B_1, A_2, B_2, ..., A_t, B_t) = (A'_1, B'_1, A'_2, B'_2, ..., A'_t, B'_t)$,
+since the communication pattern of this protocol is fixed, there is essentially $A_i = A'_i, B_i = B'_i$. \\
+
+We can thus replace every single $A_i$ with a corresponding $A'_i$, which is effectively the same as replacing $x$ with $x'$. Assume $c'' = Enc(t_{x',y})$, there is:
+\begin{align*} 
+\begin{split}
+(x,y) &= (x',y) \\
+t_{x,y} &= t_{x',y} \\
+Enc(t_{x,y}) &= Enc(t_{x',y}) \\
+c &= c''
+\end{split}					
+\end{align*}
+Also, we can replace $y$ with $y'$ for Bob. Assume $c''' = Enc(t_{x,y'})$, there is:
+\begin{align*} 
+\begin{split}
+(x,y) &= (x,y') \\
+t_{x,y} &= t_{x,y'} \\
+Enc(t_{x,y}) &= Enc(t_{x,y'}) \\
+c &= c'''
+\end{split}					
+\end{align*}
+Therefore, the interaction between Alice and Bob will be the same if they use input $(x',y)$ or $(x,y')$. \\
+
+\textbf{(b)}. For a fixed input $x \in \{0,1\}^n$, we know that protocol $\Pi$ has a fixed communication pattern.
+Assume protocol $\Pi$ takes $m$ bits of interaction where $m \textless n$.
+Then we can always repeatedly run protocol $\Pi$ to figure out which $m \in x$ bits are taken for communication. \\
+
+Next, based on $x$, we are able to purposely construct a $y$ such that $x \neq y$ but the $m$ bits from
+$x$ and $y$ are the same. \\
+
+According to part a, if $c_x=Enc(x,x)=c_y=Enc(y,y)$, there is also $c_{xy}=Enc(x,y)=c_{yx}=Enc(y,x)=c_x=c_y$. \\
+
+Alice and Bob will end up conclude that even for pairs $(x,y)$ and $(y,x)$, their inputs equal (which is wrong).
 \\
 
 
