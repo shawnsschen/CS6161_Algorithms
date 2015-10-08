@@ -268,36 +268,22 @@ Thus, $h_l(x)$ and $h_l(x')$ are pairwise independent for $x \neq x'$. And $H=\{
 %----------------------------------------------------------------------------------------
 
 \section*{Problem 3}
-\textbf{(a)}. Given the fact that $\forall t: Enc(t)=c_t \in \{0,1\}^{n-1}$ is a unique encoding,
-$t_1 = t_2$ iff $Enc(t_1)=Enc(t_2)$. \\
-
-Then if $c=c'$, $Enc(t_{x,y})=Enc(t_{x',y'})$ and thus $t_{x,y}=t_{x',y'}$. \\
-By definition, $t_{x,y}=(A_1, B_1, A_2, B_2, ..., A_t, B_t)$ and
-$t_{x',y'}=(A'_1, B'_1, A'_2, B'_2, ..., A'_t, B'_t)$ where $A_i \in x, A'_i \in x', B_i \in y, B'_i \in y'$.
-$A_i, A'_i, B_i, B'_i$ are pieces of information from Alice and Bob's databases. \\
-
-Based on $(A_1, B_1, A_2, B_2, ..., A_t, B_t) = (A'_1, B'_1, A'_2, B'_2, ..., A'_t, B'_t)$,
-since the communication pattern of this protocol is fixed, there is essentially $A_i = A'_i, B_i = B'_i$. \\
-
-We can thus replace every single $A_i$ with a corresponding $A'_i$, which is effectively the same as replacing $x$ with $x'$. Assume $c'' = Enc(t_{x',y})$, there is:
+\textbf{(a)}. Given the fact that the communication pattern of the protocol is always fixed,
+both Alice and Bob feed their input and previous communication history into the protocol and get the message
+to communicate next, which is:
 \begin{align*} 
 \begin{split}
-(x,y) &= (x',y) \\
-t_{x,y} &= t_{x',y} \\
-Enc(t_{x,y}) &= Enc(t_{x',y}) \\
-c &= c''
+m_i = P(x, \sum_{j=0}^{i-1} m_{j})
 \end{split}					
 \end{align*}
-Also, we can replace $y$ with $y'$ for Bob. Assume $c''' = Enc(t_{x,y'})$, there is:
-\begin{align*} 
-\begin{split}
-(x,y) &= (x,y') \\
-t_{x,y} &= t_{x,y'} \\
-Enc(t_{x,y}) &= Enc(t_{x,y'}) \\
-c &= c'''
-\end{split}					
-\end{align*}
-Therefore, the interaction between Alice and Bob will be the same if they use input $(x',y)$ or $(x,y')$. \\
+Assume the communication starts from Alice. For $m_0$, Alice has no history but just uses her database $x$.
+Then Bob will use $m_0$ and his database $y$ to generate $m_1$. And Alice sends $m_2$ and so on so forth. \\
+
+If we know $c=c'$, which indicates $(m_0,m_1,...,m_t)=(m'_0,m'_1,...,m'_t)$, by induction we can see that
+$\forall i \leqslant n-1: m_i=m'_i$. No matter Alice uses $x$ or $x'$, $m_0=m'_0$. This actually implies that $x=x'$. Similarly, Bob also has $y=y'$. \\
+
+As a conclusion, there is $c_{x,y}=c_{x',y'}=c_{x',y}=c_{x,y'}$. \\
+
 
 \textbf{(b)}. For a fixed input $x \in \{0,1\}^n$, we know that protocol $\Pi$ has a fixed communication pattern.
 Assume protocol $\Pi$ takes $m$ bits of interaction where $m \textless n$.
