@@ -110,11 +110,11 @@ Var[Y] &= \mathbb{E}[Y^2] - (\mathbb{E}[Y])^2 \\
 &= \sum_{j \in [n]}\mathbb{E}[Y_i^2] + \sum_{j \in [n]}\sum_{i \in [n], i \neq j}\mathbb{E}[Y_iY_j] -1 \\
 &= \sum_{j \in [n]}\mathbb{E}[Y_i] + \sum_{j \in [n]}\sum_{i \in [n], i \neq j}\mathbb{E}[Y_i]\mathbb{E}[Y_j] -1 \\
 &= n \times \frac{1}{n} + \frac{n(n-1)}{2} \times 2 \times \frac{1}{n^2} -1 \\
-&= \frac{2n-1}{n} \\
-&= 2 - \frac{1}{n}
+&= \frac{n-1}{n} \\
+&= 1 - \frac{1}{n}
 \end{split}					
 \end{align*}
-As we can see, with $n \to \infty$, $Var[Y] \to 2$. And for any $n$, $Var[Y] \leqslant 2$. \\
+As we can see, with $n \to \infty$, $Var[Y] \to 1$. And for any $n$, $Var[Y] \leqslant 1$. \\
 That is, $Var[|B(i)|] = O(1)$.
 \\
 
