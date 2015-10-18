@@ -1,0 +1,347 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[titlepage, paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{listings}
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{University of Virginia} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge CS 6161 Algorithms \\
+\huge Homework 1 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Shawn (Shuoshuo) Chen\\sc7cq@virginia.edu\\Group partner: Rolph Recto\\ rjr7je@virginia.edu} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 1}
+\textbf{(a)}. According to Tardos book, under the case that $k = n$, there is \\
+\begin{align*} 
+\begin{split}
+Pr[X_i > c] &< \left( \frac{e^{c-1}}{c} \right)^c < \left( \frac{e}{c} \right)^c = \left( \frac{1}{\gamma(n)} \right)^{e\gamma(n)} < \left( \frac{1}{\gamma(n)} \right)^{2\gamma(n)} = \frac{1}{n^2}
+\end{split}					
+\end{align*}
+By definition, $X_i$ is $|B(j)|$. Thus \\
+\begin{align*} 
+\begin{split}
+Pr[ \ |B(j)| > c \ ] &< \frac{1}{n^2} \ \bigg|_{c \ = \ \Theta(\frac{log(n)}{loglog(n)})}
+\end{split}					
+\end{align*}
+Applying the union bound over this upper bound for $|B(1)|, |B(2)|, ..., |B(n)|$, there is following \\
+\begin{align*} 
+\begin{split}
+Pr[ \ |B(*)| > c \ ] &< \frac{1}{n} \ \bigg|_{c \ = \ \Theta(\frac{log(n)}{loglog(n)})}
+\end{split}					
+\end{align*}
+In words, it means that with probability at least $1 - \frac{1}{n}$, $max_j\{|B(j)|\}$ will not exceed
+$\Theta(\frac{log(n)}{loglog(n)})$.
+\\
+
+\textbf{(b)}. By definition, $|B(i)| = Y = \sum_{j \in [n]} Y_j$, thus $Var[|B(i)|] = Var[Y]$. And there is \\
+\begin{align*} 
+\begin{split}
+Var[Y] &= \mathbb{E}[Y^2] - (\mathbb{E}[Y])^2 \\
+&= \mathbb{E}[(\sum_{j \in [n]} Y_j)^2] - (\mathbb{E}[\sum_{j \in [n]} Y_j])^2 \\
+&= \mathbb{E}[(\sum_{j \in [n]} Y_j)^2] - (\sum_{j \in [n]} \mathbb{E}[Y_j])^2 \\
+&= \mathbb{E}[(\sum_{j \in [n]} Y_j)^2] - n \times \frac{1}{n} \\
+&= \mathbb{E}[\sum_{j \in [n]}\sum_{i \in [n]} Y_iY_j] - 1 \\
+&= \mathbb{E}[\sum_{j \in [n]} Y_i^2 + \sum_{j \in [n]}\sum_{i \in [n], i \neq j} Y_iY_j] - 1 \\
+&= \sum_{j \in [n]}\mathbb{E}[Y_i^2] + \sum_{j \in [n]}\sum_{i \in [n], i \neq j}\mathbb{E}[Y_iY_j] -1 \\
+&= \sum_{j \in [n]}\mathbb{E}[Y_i] + \sum_{j \in [n]}\sum_{i \in [n], i \neq j}\mathbb{E}[Y_i]\mathbb{E}[Y_j] -1 \\
+&= n \times \frac{1}{n} + \frac{n(n-1)}{2} \times 2 \times \frac{1}{n^2} -1 \\
+&= \frac{n-1}{n} \\
+&= 1 - \frac{1}{n}
+\end{split}					
+\end{align*}
+As we can see, with $n \to \infty$, $Var[Y] \to 1$. And for any $n$, $Var[Y] \leqslant 1$. \\
+That is, $Var[|B(i)|] = O(1)$.
+\\
+
+\textbf{(c)}. The Chebyshev's inequality gives
+\begin{align*} 
+\begin{split}
+Pr[|X-\mu| \geqslant k\delta] \leqslant \frac{1}{k^2}
+\end{split}					
+\end{align*}
+We can replace $X = |B(j)|$, $\mu = 1$ and $\delta = \sqrt{\frac{2n-1}{n}}$.
+\begin{align*} 
+\begin{split}
+&Pr[|\ |B(j)|-1\ | \geqslant k\sqrt{\frac{2n-1}{n}}] \leqslant \frac{1}{k^2} \\
+&Pr[|B(j)| \geqslant 1+k\sqrt{\frac{2n-1}{n}}] \leqslant \frac{1}{k^2} \\
+\end{split}					
+\end{align*}
+If we make $k^2 = 100n$, solve for k, we get $k = 10\sqrt{n}$.
+Replace $k = 10\sqrt{n}$:
+\begin{align*} 
+\begin{split}
+Pr[|B(j)| \geqslant 1+10\sqrt{2n-1}] \leqslant \frac{1}{100n}
+\end{split}					
+\end{align*}
+And it is easy to see that:
+\begin{align*} 
+\begin{split}
+Pr[|B(j)| \textgreater c\sqrt{n}] \leqslant \frac{1}{100n} \ \bigg|_{c\sqrt{n} \ \textgreater \ 1+10\sqrt{2n-1}}
+\end{split}					
+\end{align*}
+Solve for c in $c\sqrt{n} \ \textgreater \ 1+10\sqrt{2n-1}$, we get $c \textgreater \frac{1}{\sqrt{n}} + 10\sqrt{\frac{2n-1}{n}}$. \\
+Note that $c > 10\sqrt{2} \ \bigg|_{n \to \infty}$. \\
+To sum up, for every fixed $j \in [k=n]$, there is
+\begin{align*} 
+\begin{split}
+Pr[|B(j)| \textgreater c\sqrt{n}] \leqslant \frac{1}{100n} \ \bigg|_{c \ \textgreater \ 10\sqrt{2}}
+\end{split}					
+\end{align*}
+Applying the union bound over this upper bound for $|B(1)|, |B(2)|, ..., |B(n)|$, we get
+\begin{align*} 
+\begin{split}
+Pr[\forall j \in [n]: |B(j)| \textgreater c\sqrt{n}] \leqslant \frac{1}{100} \ \bigg|_{c \ \textgreater \ 10\sqrt{2}}
+\end{split}					
+\end{align*}
+Flip it over, we have
+\begin{align*} 
+\begin{split}
+Pr[\forall j \in [n]: |B(j)| \leqslant c\sqrt{n}] \geqslant \frac{99}{100} \ \bigg|_{c \ \textgreater \ 10\sqrt{2}}
+\end{split}					
+\end{align*}
+\\
+
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 2
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 2}
+\textbf{(a)}. Since $a, b, x \in \mathbb{Z}_p$, $h_{a,b}(x) = ax+b = z \in \mathbb{Z}_p$
+\begin{align*} 
+\begin{split}
+Pr[h_{a,b}(x) = z] &= Pr[ax+b = z \ mod \ p] \\
+&= Pr[ax \ mod \ p = z-b \ mod \ p] \\
+&= Pr[a^{-1}ax \ mod \ p = a^{-1}(z-b) \ mod \ p] \\
+&= Pr[x \ mod \ p = a^{-1}(z-b) \ mod \ p] \\
+&= \frac{1}{p}
+\end{split}					
+\end{align*}
+As above shows, the probability of getting z is identical to the probability of uniformly randomly picking x, which is uniform over $\mathbb{Z}_p$. \\
+Then, for $x \neq y$,
+\begin{align*} 
+\begin{split}
+Pr[h_{a,b}(x) = k \land h_{a,b}(y) = m] &= Pr[ax+b=k \ \land \ ay+b=m \  (mod\ p)] \\
+&= Pr[x=a^{-1}(k-b) \ \land \ y=a^{-1}(m-b) \  (mod\ p)] \\
+&= Pr[x=a^{-1}(k-b) \  (mod\ p)] \times Pr[y=a^{-1}(m-b) \ (mod\ p)] \\
+&= \frac{1}{p} \times \frac{1}{p} \\
+&= \frac{1}{p^2}
+\end{split}					
+\end{align*}
+Thus, $h_{a,b}(x)$ and $h_{a,b}(y)$ are pairwise independent for $x \neq y$. \\
+And $H=\{ h_{a,b}(x)=ax+b \ mod\ p\ |\ a,b \in \mathbb{Z}_p \}$ is a pairwise uniform family from $\mathbb{Z}_p$ to itself. \\
+
+\textbf{(b)}. Given the statement in part b, the multiplicative inverse still exists under any general finite field $\{0,1\}^k$. \\
+In a similar way, first sample $l$ from $\{0,1\}^{2k}$, where $l$ has $2k$ bits. Then slice $l$ into two pieces.
+Assign ($1$st bit, $k$th bit) to $a$ and ($(k+1)$th bit, $(2k)$th bit) to $b$ such that $a,b \in \{0,1\}^k$. \\
+We can still construct a family of hash functions $H=\{ h_l(x)=ax+b \ mod \ 2^k\ |\ a,b \in \{0,1\}^k \}$. \\
+For any $x \in \{0,1\}^k$:
+\begin{align*} 
+\begin{split}
+Pr[h_l(x) = z] &= Pr[ax+b = z \ mod \ 2^k] \\
+&= Pr[ax \ mod \ 2^k = z-b \ mod \ 2^k] \\
+&= Pr[a^{-1}ax \ mod \ 2^k = a^{-1}(z-b) \ mod \ 2^k] \\
+&= Pr[x \ mod \ 2^k = a^{-1}(z-b) \ mod \ 2^k] \\
+&= \frac{1}{2^k}
+\end{split}					
+\end{align*}
+The probability of getting z is identical to the probability of uniformly randomly picking x, which is uniform over
+$\{0,1\}^k$. \\
+Then, for $x \neq x'$,
+\begin{align*} 
+\begin{split}
+Pr[h_l(x) = k \land h_l(x') = m] &= Pr[ax+b=k \ \land \ ax'+b=m \  (mod\ 2^k)] \\
+&= Pr[x=a^{-1}(k-b) \ \land \ x'=a^{-1}(m-b) \  (mod\ 2^k)] \\
+&= Pr[x=a^{-1}(k-b) \  (mod\ 2^k)] \times Pr[x'=a^{-1}(m-b) \ (mod\ 2^k)] \\
+&= \frac{1}{2^k} \times \frac{1}{2^k} \\
+&= \frac{1}{2^{2k}}
+\end{split}					
+\end{align*}
+Thus, $h_l(x)$ and $h_l(x')$ are pairwise independent for $x \neq x'$. \\
+And $H=\{ h_l(x)=ax+b \ mod\ 2^k\ |\ a,b \in \{0,1\}^k \}$ is a pairwise uniform family from $\{0,1\}^k$ to itself. \\
+
+\textbf{(c)}. For the case $m \textless n = k$, sample $l$ from $\{0,1\}^{2k}$, where $l$ has $2k=2n$ bits. Then slice $l$ into two pieces.
+Assign ($1$st bit, $n$th bit) to $a$ and ($(n+1)$th bit, $(2n)$th bit) to $b$ such that $a,b \in \{0,1\}^n$. \\
+We can still construct a family of hash functions $H=\{ h_l(x)=ax+b \ mod \ 2^n\ |\ a,b \in \{0,1\}^n \}$. \\
+Note that $ax \in \{0,1\}^{m+n}$ and thus $ax+b \in \{0,1\}^{m+n}$ where
+$m+n \textgreater n$. The input $x \in \{0,1\}^m$ is automatically padded to $\{0,1\}^{m+n}$. After the $mod \ 2^n$, the output is mapped into $\{0,1\}^n$. \\
+
+For any $x,x' \in \{0,1\}^m, x \neq x'$,
+\begin{align*} 
+\begin{split}
+Pr[h_l(x) = r \land h_l(x') = s] &= Pr[ax+b=r \ \land \ ax'+b=s \  (mod\ 2^n)] \\
+&= Pr[a=\frac{1}{(x-x')}r - \frac{1}{(x-x')}s\ \land \ b=\frac{-x}{(x-x')}r + \frac{x'}{(x-x')}s\  (mod\ 2^n)] \\
+&= Pr[a=\frac{1}{(x-x')}r - \frac{1}{(x-x')}s\  (mod\ 2^n)] \\
+&\quad \times Pr[b=\frac{-x}{(x-x')}r + \frac{x'}{(x-x')}s\  (mod\ 2^n)] \\
+&= \frac{1}{2^n} \times \frac{1}{2^n} \\
+&= \frac{1}{2^{2n}}
+\end{split}					
+\end{align*}
+Thus, $h_l(x)$ and $h_l(x')$ are pairwise independent for $x \neq x'$. And $H=\{ h_l(x)=ax+b \ mod\ 2^n\ |\ a,b \in \{0,1\}^n \}$ is a pairwise independent family from $\{0,1\}^m$ to $\{0,1\}^n$. \\
+
+For the case $n \textless m = k$, sample $l$ from $\{0,1\}^{2k}$, where $l$ has $2k=2m$ bits. Then slice $l$ into two pieces.
+Assign ($1$st bit, $m$th bit) to $a$ and ($(m+1)$th bit, $(2m)$th bit) to $b$ such that $a,b \in \{0,1\}^m$. \\
+We can still construct a family of hash functions $H=\{ h_l(x)=ax+b \ mod \ 2^n\ |\ a,b \in \{0,1\}^m \}$. \\
+Note that $ax \in \{0,1\}^{2m}$ and thus $ax+b \in \{0,1\}^{2m}$ where
+$2m \textgreater n$. The input $x \in \{0,1\}^m$ shrinks to $\{0,1\}^n$ after the $mod \ 2^n$. \\
+
+For any $x,x' \in \{0,1\}^m, x \neq x'$,
+\begin{align*} 
+\begin{split}
+Pr[h_l(x) = r \land h_l(x') = s] &= Pr[ax+b=r \ \land \ ax'+b=s \  (mod\ 2^n)] \\
+&= Pr[ax+b=r \  (mod\ 2^n)] \times Pr[ax'+b=s \ (mod\ 2^n)] \\
+&= \frac{1}{2^n} \times \frac{1}{2^n} \\
+&= \frac{1}{2^{2n}}
+\end{split}					
+\end{align*}
+Thus, $h_l(x)$ and $h_l(x')$ are pairwise independent for $x \neq x'$. And $H=\{ h_l(x)=ax+b \ mod\ 2^n\ |\ a,b \in \{0,1\}^m \}$ is a pairwise independent family from $\{0,1\}^m$ to $\{0,1\}^n$. \\
+\\
+
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 3
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 3}
+\textbf{(a)}. Given the fact that the communication pattern of the protocol is always fixed,
+both Alice and Bob feed their input and previous communication history into the protocol and get the message
+to communicate next, which is:
+\begin{align*} 
+\begin{split}
+m_i = P(x, \sum_{j=0}^{i-1} m_{j})
+\end{split}					
+\end{align*}
+Assume the communication starts from Alice. For $m_0$, Alice has no history but just uses her database $x$.
+Then Bob will use $m_0$ and his database $y$ to generate $m_1$. And Alice sends $m_2$ and so on so forth. \\
+
+If we know $c=c'$, which indicates $(m_0,m_1,...,m_t)=(m'_0,m'_1,...,m'_t)$, by induction we can see that
+$\forall i \leqslant n-1: m_i=m'_i$. No matter Alice uses $x$ or $x'$, $m_0=m'_0$. This actually implies that $x=x'$. Similarly, Bob also has $y=y'$. \\
+
+As a conclusion, there is $c_{x,y}=c_{x',y'}=c_{x',y}=c_{x,y'}$. \\
+
+
+\textbf{(b)}. For a fixed input $x \in \{0,1\}^n$, we know that protocol $\Pi$ has a fixed communication pattern.
+Assume protocol $\Pi$ takes $m$ bits of interaction where $m \textless n$.
+Then we can always repeatedly run protocol $\Pi$ to figure out which $m \in x$ bits are taken for communication. \\
+
+Next, based on $x$, we are able to purposely construct a $y$ such that $x \neq y$ but the $m$ bits from
+$x$ and $y$ are the same. \\
+
+According to part a, if $c_x=Enc(x,x)=c_y=Enc(y,y)$, there is also $c_{xy}=Enc(x,y)=c_{yx}=Enc(y,x)=c_x=c_y$. \\
+
+Alice and Bob will end up conclude that even for pairs $(x,y)$ and $(y,x)$, their inputs equal (which is wrong).
+\\
+
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 4
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 4}
+First, to prove $P_A(M_1)P_A(M_2) \equiv P_A(M_1M_2) \quad (mod n)$.
+\begin{align*} 
+\begin{split}
+P_A(M_1)P_A(M_2) &= (M_1^e \  mod \ n )(M_2^e \  mod \ n ) \\
+&= (M_1^eM_2^e) \ mod \ n \\
+&= (M_1M_2)^e \ mod \ n \\
+&= P_A(M_1M_2)
+\end{split}					
+\end{align*}
+Assume the message we want to crack is $M$, which is encrypted in $P_A(M)$.
+We can pick a message $M_r \in \mathbb{Z}_n$ at random and make sure that $M_{r}^{-1} \ mod \ n$ exists.
+Since $M_r \in \mathbb{Z}_n$, there should exist its unique multiplicative inverse $M_r^{-1}$. \\
+
+Then encrypt $M_r$ to get $P_A(M_r)$. And use what we have proved to get
+$P_A(MM_r) = P_A(M)P_A(M_r)$. \\
+
+If an advesary can decrypt the messages from $\mathbb{Z}_n$ by $1\%$, it means the probability of success
+is $p = 0.01$ to decrypt $P_A(MM_r)$ and get $MM_r \ mod \ n$. If the decryption attempt is successful,
+we can thus compute $M_r^{-1} \ mod \ n$ and derive $M = (MM_r)M_r^{-1} \ mod \ n$. \\
+
+Now let us discuss the probability of successful decryption. It is noted that the probability of successful decryption
+for a single attempt is $p = 0.01$. Thus the failing probability for a single attempt is $1-p = 1- 0.01 = 0.99$.
+We want to make the overall probability high when decrypting $M$, which implies we need to keep trying.
+Assume we need to try $t$ times to decrypt $M$, the probability of success in $t$ times is
+$P_{decrypt} = 1-0.99^t$. If "high probability" means $99\%$, solve for $t$:
+\begin{align*} 
+\begin{split}
+P_{decrypt} &= 1 - 0.99^t \\
+&= 0.99 \\
+\end{split}					
+\end{align*}
+\begin{align*} 
+\begin{split}
+t &= \log_{0.99}(0.01) \\
+&= 458.2
+\end{split}					
+\end{align*}
+Thus we get $t = 459$.
+\\
+
+
+\end{document}
