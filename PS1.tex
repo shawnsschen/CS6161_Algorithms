@@ -59,7 +59,7 @@
 \textsc{University of Virginia} \\ [25pt] % Your university, school and/or department name(s)
 \horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
 \huge CS 6161 Algorithms \\
-\huge Homework 1 \\ % The assignment title
+\huge Problem Set 1 \\ % The assignment title
 \horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
 }
 
@@ -76,26 +76,11 @@
 %----------------------------------------------------------------------------------------
 
 \section*{Problem 1}
-\textbf{(a)}. According to Tardos book, under the case that $k = n$, there is \\
-\begin{align*} 
-\begin{split}
-Pr[X_i > c] &< \left( \frac{e^{c-1}}{c} \right)^c < \left( \frac{e}{c} \right)^c = \left( \frac{1}{\gamma(n)} \right)^{e\gamma(n)} < \left( \frac{1}{\gamma(n)} \right)^{2\gamma(n)} = \frac{1}{n^2}
-\end{split}					
-\end{align*}
-By definition, $X_i$ is $|B(j)|$. Thus \\
-\begin{align*} 
-\begin{split}
-Pr[ \ |B(j)| > c \ ] &< \frac{1}{n^2} \ \bigg|_{c \ = \ \Theta(\frac{log(n)}{loglog(n)})}
-\end{split}					
-\end{align*}
-Applying the union bound over this upper bound for $|B(1)|, |B(2)|, ..., |B(n)|$, there is following \\
-\begin{align*} 
-\begin{split}
-Pr[ \ |B(*)| > c \ ] &< \frac{1}{n} \ \bigg|_{c \ = \ \Theta(\frac{log(n)}{loglog(n)})}
-\end{split}					
-\end{align*}
-In words, it means that with probability at least $1 - \frac{1}{n}$, $max_j\{|B(j)|\}$ will not exceed
-$\Theta(\frac{log(n)}{loglog(n)})$.
+\textbf{(a)}.
+Assuming the value of ${x_1,x_2, ... ,x_n}$ is pick at random independently. Then the probability of getting true
+and false is equal, where $p_{true} = p_{false} = 0.5$. For a clause $C_i$, the probability of evaluating true is
+$E[p_{true}] = 1-2^{-d}$. And there are $m$ clauses in $\phi$, so the number of satified clauses is
+$E[N_{SAT}] = (1-2^{-d}) * m$, which indicates there is an assignment satisfying at least $(1-2^{-d})m$ clauses.
 \\
 
 \textbf{(b)}. By definition, $|B(i)| = Y = \sum_{j \in [n]} Y_j$, thus $Var[|B(i)|] = Var[Y]$. And there is \\
