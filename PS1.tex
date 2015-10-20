@@ -245,8 +245,45 @@ There is:
 &= \frac{2}{3}m \geq \frac{2}{3}c^*
 \end{split}					
 \end{align*}
+\\
 
-
+\textbf{8.}
+First, we just uniformly pick $k \in [n]$ nodes at random. And let
+\begin{gather*}
+Y_{uv} =
+\begin{cases}
+1 \quad exist\ an\ edge\ between\ (u,v) \\
+0 \quad not\ exist \\
+\end{cases}
+\end{gather*}
+Note that there will be $2m$ edges in total because (u,v) and (v,u) are doubly counted. \\
+Then we can get:
+\begin{align*} 
+\begin{split}
+\mathbb{E}[Y_{uv}] &= \frac{2m}{n(n-1)} \\
+\end{split}					
+\end{align*}
+Note that u and v cannot be the same node, otherwise it is not an edge. \\
+Then in $G[k]$, the expected number of edges is:
+\begin{align*} 
+\begin{split}
+\mathbb{E}[G[k]_{edge}] &= \mathbb{E}[\sum_{k \in [n]} Y_[uv]] \\
+&= \sum_{k \in [n]} \mathbb{E}[Y_{uv}] \\
+&= \frac{k(k-1)m}{n(n-1)}
+\end{split}					
+\end{align*}
+Now assume $e=\mathbb{E}[G[k]_{edge}]$, its upper bound is $e_m = \frac{k(k-1)}{2}$ (a full graph).
+We can repeatedly run this randomized algorithm multiple times until we get the expected value of edges. The probability of getting $e$ in a single run is $p$. And the probability of finding $j$ edges is $p_j$.
+So there is:
+\begin{align*} 
+\begin{split}
+e &= \sum_{j}jp_j = \sum_{j \textless e}jp_j + \sum_{j \geq e}jp_j \\
+&\textless \sum_{j \textless e}(e - \epsilon)p_j + \sum_{j \geq e}(e_m)p_j \\
+&= (e-\epsilon)(1-p) + \frac{k(k-1)}{2}p \\
+&\leq e - \epsilon + \frac{k(k-1)}{2}p
+\end{split}					
+\end{align*}
+We can see that $p \geq \frac{2\epsilon}{k(k-1)}$. Since the randomized algorithm itself is polynomial time, and repeating it $\frac{1}{p}$ times is still polynomial. Thus, we can just run this algorithm $\frac{1}{p}$ times to get the expected edges.
 
 
 \end{document}
