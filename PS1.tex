@@ -207,5 +207,46 @@ So when $p=\frac{1}{3}$, $E[N_{TTH}]$ becomes minimum.
 \\
 
 
+%----------------------------------------------------------------------------------------
+%	PROBLEM 5
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 5}
+\textbf{1.}
+Let us use the same notation from the class, where $m$ is the number of edges in $G$.
+Then we can see $c^* \leq m$. \\
+
+Now, we randomly color each node with one of the three colors. Since the nodes are uniformly distributed and pairwise independent, the probability of getting each color is equally $\frac{1}{3}$. Then we can use the similar trick: \\
+Let $Y_e$ be a random variable that indicates whether an edge $e$ is satified or not:
+\begin{gather*}
+Y_e =
+\begin{cases}
+1 \quad satisfied \\
+0 \quad not\ satisfied \\
+\end{cases}
+\end{gather*}
+It is easy to see that there are $3 \time 3 = 9$ combinations or coloring, where $3$ of them do not satisfy. So:
+\begin{align*} 
+\begin{split}
+\mathbb{E}[Y_e]=\frac{2}{3}
+\end{split}					
+\end{align*}
+And let $Y$ be a random variable indicating the total number of satisfied edges:
+\begin{align*} 
+\begin{split}
+Y = \sum_{e \in [m]} Y_e
+\end{split}					
+\end{align*}
+There is:
+\begin{align*} 
+\begin{split}
+\mathbb{E}[Y] &= \mathbb{E}[\sum_{e \in [m]} Y_e] \\
+&= \sum_{e \in [m]} \mathbb{E}[Y_e] \\
+&= \frac{2}{3}m \geq \frac{2}{3}c^*
+\end{split}					
+\end{align*}
+
+
+
 
 \end{document}
