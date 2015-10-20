@@ -84,6 +84,24 @@ $E[N_{SAT}] = (1-2^{-d}) * m$, which indicates there is an assignment satisfying
 \\
 
 \textbf{(b).}
+Assume $\forall \epsilon \in (0,1), \exists \delta \in (0,1): Pr[K \geq (1-2^{-d}-\epsilon)m] \textgreater \delta$.
+Let $K$ be the number of satisfied clauses, there is:
+\begin{align*} 
+\begin{split}
+\mathbb{E}[K] &= \sum_{k} kPr[K=k] \\
+&= \sum_{k \textless (1-2^{-d}-\epsilon)m} kPr[K=k] + \sum_{k \geq (1-2^{-d}-\epsilon)m} kPr[K=k] \\
+&\textless (1-2^{-d}-\epsilon)mPr[K \textless (1-2^{-d}-\epsilon)m] + mPr[K \geq (1-2^{-d}-\epsilon)m] \\
+&= (1-2^{-d}-\epsilon)m + (2^{-d}+\epsilon)mPr[K \geq (1-2^{-d}-\epsilon)m] \\
+\end{split}
+\end{align*}
+And recall $\mathbb{E}[K]=1-2^{-d}$, we can derive:
+\begin{align*} 
+\begin{split}
+Pr[K \geq (1-2^{-d}-\epsilon)m] \textgreater \frac{\epsilon}{2^{-d}+\epsilon}
+\end{split}
+\end{align*}
+So let $\delta = \frac{\epsilon}{2^{-d}+\epsilon}$, we essentially have $Pr[K \geq (1-2^{-d}-\epsilon)m] \textgreater \delta$.
+With probability 0.99, we want to find an assignment that satisfies. In other words, we need to make $(1-\delta)^t  \leq 0.01$. Solve for t, we can get the number of times to run this algorithm to be $t \geq log_{1-\delta} 0.01 = log_{\frac{2^{-d}}{2^{-d}+0.0001}} 0.01$.
 \\
 
 
