@@ -308,7 +308,17 @@ We can see that $p \geq \frac{2\epsilon}{k(k-1)}$. Since the randomized algorith
 %----------------------------------------------------------------------------------------
 
 \section*{Problem 6}
-
+Since there is no bad node, according to the algorithm, nothing needs to be moved. \\
+And previously, we have already proved in any graph, there will be at least half of the edges in the cut:
+\begin{align*} 
+\begin{split}
+E[Y] &= E[\sum_{e \in [m]} Y_e] = \sum_{e \in [m]} E[Y_e] \\
+&= \frac{1}{2} * m
+\end{split}					
+\end{align*}
+And note there are $n$ nodes in the graph, so the maximum number of edges is $n(n-1)/2$. \\
+If we assume all nodes are bad, according to the algorithm, we need to move every single node. The best result of that is we end up having all edges in the cut, which is $n(n-1)/2$ edges at most. \\
+And for each move, the least effecient case is we only increase the number of edges by 1. In this case, we need to proceed $n(n-1)/2$ steps, and there is no worse case than it.
 
 
 \end{document}
