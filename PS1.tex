@@ -107,6 +107,65 @@ With probability 0.99, we want to find an assignment that satisfies. In other wo
 
 
 %----------------------------------------------------------------------------------------
+%	PROBLEM 2
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 2}
+\textbf{(a).}
+There are 2 cases: 4 nodes in 2 edges and 3 nodes in 2 edges. \\
+
+For the case 4 nodes in 2 egdes, there are $X_i, X_j, X_i', X_j'$:
+\begin{align*} 
+\begin{split}
+Pr[Y_e=1 \land Y_e'=1] &= \frac{4}{16}
+\end{split}
+\end{align*}
+where the satisfied sequence of $(X_i, X_j, X_i', X_j')$ is 1010, 1001, 0110, 0101.
+Also, there is:
+\begin{align*} 
+\begin{split}
+Pr[Y_e=1] &= Pr[Y_e'=1] = \frac{1}{2}
+\end{split}
+\end{align*}
+Thus:
+\begin{align*} 
+\begin{split}
+Pr[Y_e=1 \land Y_e'=1] &= Pr[Y_e=1]Pr[Y_e']
+\end{split}
+\end{align*}
+Similarly, for the 3-node case, there are $X_i, X_j, X_j'$:
+\begin{align*} 
+\begin{split}
+Pr[Y_e=0 \land Y_e'=1] &= \frac{2}{8}
+\end{split}
+\end{align*}
+where the satisfied sequence of $(X_i, X_j, X_j')$ is 001, 110.
+Thus:
+\begin{align*} 
+\begin{split}
+Pr[Y_e=1 \land Y_e'=1] &= Pr[Y_e=1]Pr[Y_e'] \\
+&= \frac{1}{2} * \frac{1}{2} = \frac{1}{4}
+\end{split}
+\end{align*}
+That $e$ and $e'$ are independent for $e \neq e'$.
+\\
+
+\textbf{(b).}
+If $e_1,e_2, ... , e_k$ form a cycle, let us assume that we already know the first $k-1$ edges are in the same partition, then the last edge is actually fixed since both of its endpoints are already fixed by $e_1$ and $e_{k-1}$.
+Thus:
+\begin{align*} 
+\begin{split}
+Pr[Y_{e_1}=0 \land Y_{e_2}=0 \land ... \land Y_{e_k}=0] &= Pr[Y_{e_1}=0 \land Y_{e_2}=0 \land ... \land Y_{e_{k-1}}=0] \\
+&= Pr[Y_{e_1}=0]Pr[Y_{e_2}=0]...Pr[Y_{e_{k-1}}=0] \\
+&\neq Pr[Y_{e_1}=0]Pr[Y_{e_2}=0]...Pr[Y_{e_{k-1}}=0] * \frac{1}{2} \\
+&= Pr[Y_{e_1}=0]Pr[Y_{e_2}=0]...Pr[Y_{e_{k}}=0]
+\end{split}
+\end{align*}
+Thus $Y_{e_1},Y_{e_2}, ... , Y_{e_k}$ are not independent.
+
+
+
+%----------------------------------------------------------------------------------------
 %	PROBLEM 3
 %----------------------------------------------------------------------------------------
 
