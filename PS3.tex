@@ -72,10 +72,19 @@
 \maketitle % Print the title
 
 %----------------------------------------------------------------------------------------
-%	PROBLEM 1
+%	PROBLEM 3
 %----------------------------------------------------------------------------------------
 
-\section*{Problem 1}
+\section*{Problem 3}
+Intuitively, an input $x \in [n]$ could be moved to at most 2 possible places. So after depth $i$,
+$x$ could end up appearing in at most $2^i$ places. In order to move $x$ to where it should be, we need to make the sorting network able to deliver $x$ to its expected output wire. And we already know that there are $n$ output wires. So there is:
+\begin{align*}
+\begin{split}
+2^i &= x \\
+i &= lg n
+\end{split}
+\end{align*}
+The depth of this sorting network $i$ should be at least $i=lg n$.
 
 
 
