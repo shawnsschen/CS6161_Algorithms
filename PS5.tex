@@ -76,24 +76,24 @@
 %----------------------------------------------------------------------------------------
 
 \section*{Problem 5}
-Intuitively, an input $x \in [n]$ could be moved to at most 2 possible places. So after depth $i$,
-$x$ could end up appearing in at most $2^i$ places. In order to move $x$ to where it should be, we need to make the sorting network able to deliver $x$ to its expected output wire. And we already know that there are $n$ output wires. So there is:
-\begin{align*}
-\begin{split}
-2^i &= x \\
-i &= lg n
-\end{split}
-\end{align*}
-The depth of this sorting network $i$ should be at least $i=lg n$.
+The algorithm is as follows: \\
+1. Construct $G^3$ of graph $G = (V, E)$. \\
+2. Compute the BST for $G^3$. \\
+3. Take a full walk of the BST and log the first-time visited vertices sequentially in H. \\
+4. return the Hamiltonian cycle H. \\
 
+First, according to the definition of the 3rd power of graph G, $G^3 = (V, E^3)$ where there is an edge
+$(u, v) \in E^3$ such that $\forall path_{uv} \in G$, it only contains at most 3 edges. In other words, if there exists an edge from u to v in $G^3$, the path from u to v in G would not exceed 3 edges. \\
+Assume the costliest edge in the optimal Hamiltonian cycle ($H^*$) is $w^*$. Since the Halmitonian cycle is constructed by adding an edge to the BST, the costliest edge in the BST cannot exceed $w^*$. Because if the extra edge added into the BST is no heavier than $w^*$, the BST has the same cost as the cycle. Otherwise if the extra edge is heavier than $w^*$, the cycle has more cost than the BST. \\
+Thus, in G, we have $c_{max}(BST^*) \leq c_{max}(H^*) = w^*$. \\
+And also note that a full walk (W) of the BST satisfies $c_{max}(W) \leq 3w^* = 3c_{max}(H^*)$. Because by definition of $G^3$, the costliest edge in the walk can correspondingly map to a path in G with at most 3 edges. Even for the worst case, all 3 edges are equally costliest, which is $w^*$. The costliest edge in the walk will not exceed $3w^*$. \\
+Finally, apply the triangle inequality, skipping nodes in the walk will not increase the cost, which leads to
+$c_{max}(H) \leq c_{max}(W)$. \\
+To sum it up, there is $c_{max}(H) \leq c_{max}(W) \leq 3c_{max}(H^*)$. \\
+From above, we see that this algorithm gives an approximation ratio of 3. \\
 
-
-%----------------------------------------------------------------------------------------
-%	PROBLEM 4
-%----------------------------------------------------------------------------------------
-
-\section*{Problem 4}
-See CLRS Theorem 27.2 (Zero-one principle)
+Now consider the time complexity, for a graph with $|V|$ vertices, there could exist at most $\frac{|V|*(|V|-1)}{2}$ edges. Thus, constructing $G^3$ can be done within polynomial time $O(|V|^2)$. \\
+And from problem 23-3, we can compute the BST by removing edges starting from the costliest in linear time. Taking a full walk can also easily be done in polynomial time. So overall, this algorithm is polynomial.
 
 
 
