@@ -63,13 +63,33 @@
 \horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
 }
 
-\author{Shawn (Shuoshuo) Chen\\sc7cq@virginia.edu\\Group partner: Rolph Recto\\ rjr7je@virginia.edu} % Your name
+\author{Shawn (Shuoshuo) Chen\\sc7cq@virginia.edu} % Your name
 
 \date{\normalsize\today} % Today's date or a custom date
 
 \begin{document}
 
 \maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 2
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 2}
+First, we prove (a) graph G is connected if it has n-1 edges and no cycle. \\
+Assume there are k connected subgraphs in G. By the definition of tree, an undirected, connected, acyclic graph is a tree. Thus the k subgraphs are k trees. Thus, each subgraph has $|V_i|-1$ edges, which will be proved later. Then sum up all the edges in these k subgraphs, we get $|V|-k = n-k$ edges. According to property (b), there must be $k=1$, which effectively makes G connected as a whole component. \\
+
+Next, we prove (b) graph G has n-1 edges if it is connected and acyclic. \\
+We can prove it by showing $|E| \geq |V| -1$ and $|E| \leq |V| -1$. \\
+By induction, if $|V|=1,2$, $|E| \geq 0,1$ is trivially true. Then assume it is also true for $|V| \leq n$. For a graph with $n+1$ vertices, choose a random vertex $v$, remove $v$ and its incident edges. Then the graph is divided into $k$ connected subgraphs with $n_1, n_2, ... , n_k$ vertices respectively. By assumption, there is $\sum_1^k |E_i| \geq \sum_1^k (n_i -1)=\sum_1^k n_i - k = n-k$. Now add $v$ back to G, since G is connected, there should be at least one edge between $v$ and each subgraph. Therefore,
+$|E| \geq \sum_i^k |E_i| + k = n-k+k = n = |V| - 1$. \\
+Similarly, it is trivial that a connected graph with 1 or 2 vertices has 0 or 1 edge. Assume $|E| \leq |V| -1$ for $|V| \leq n$. Removing an arbitary edge from G separates the graph into $k \geq 2$ connected subgraphs. Each subgraph, by definition, is a tree. Because each subgraph has less than $|V|=n$ vertices, it satisfies $|E_i| \leq |V_i| - 1$. Sum up all edges in all subgraphs, there is $\sum_1^k |E_i| \leq |V| - k \leq |V| - 2$. After adding the removed edge back, we have $|E| \leq |V| - 1$. \\
+Therefore, we conclude $|E| = |V| - 1 = n-1$. \\
+
+Finally, we prove (c) graph G has no cycle if it is connected and it has n-1 edges. \\
+Suppose there is a cycle in G containing k vertices: $v_1, v_2, ... , v_k$. Let $G_k = (V_k, E_k)$ be the subgraph consisting of the cycle. Then there is $|V_k| = |E_k| = k$. If $k \textless |V|$, there must exist a vertex $v_{k+1} \in V - V_k$ that is adjacent to $v_i \in V_k$ due to G is connected. Let $G_{k+1} = (V_{k+1}, E_{k+1})$ be the subgraph with $V_{k+1} = V_k \cup \{v_{k+1}\}$ and $E_{k+1} = E_k \cup \{(v_i, v_{k+1})\}$. Note there is $|V_{k+1}| = |E_{k+1}| = k$. If $k+1 \textless |V|$, we can continue to $G_{k+2}$ until it reaches $G_n$ where $n=|V|, V_n=V, |E_n|=|V_n|=|V|$. Since $G_n$ is a subgraph of G, there is $|E| \geq |V|$. It contradicts the property that $|E|=|V|-1=n-1$. \\
+
+
 
 %----------------------------------------------------------------------------------------
 %	PROBLEM 4
@@ -88,7 +108,7 @@ To conclude, our algorithm is: \\
 3. After getting the cut $C$, iterate over all edges in $C$, increase capacity and call Edmonds-Karp. \\
 4. See if $|C| \textless |C_i|$ for all $i$. If so, return $C$. \\
 
-In the worst case, for each input $(s, t)$, we need to call Edmonds-Karp at most $|E|+1$ times to determine whether the first returned cut $C$ is unique or not. And for the undirected graph, we need to repeat $O(|V|^2)$ times. So eventually, this algorithm takes $O(|E|^3|V|^3)$, which is polynomial.
+In the worst case, for each input $(s, t)$, we need to call Edmonds-Karp at most $|E|+1$ times to determine whether the first returned cut $C$ is unique or not. And for the undirected graph, we need to repeat $O(|V|^2)$ times. So eventually, this algorithm takes $O(|E|^3|V|^3)$, which is polynomial. \\
 
 
 
@@ -114,7 +134,7 @@ To sum it up, there is $c_{max}(H) \leq c_{max}(W) \leq 3c_{max}(H^*)$. \\
 From above, we see that this algorithm gives an approximation ratio of 3. \\
 
 Now consider the time complexity, for a graph with $|V|$ vertices, there could exist at most $\frac{|V|*(|V|-1)}{2}$ edges. Thus, constructing $G^3$ can be done within polynomial time $O(|V|^2)$. \\
-And from problem 23-3, we can compute the BST by removing edges starting from the costliest in linear time. Taking a full walk can also easily be done in polynomial time. So overall, this algorithm is polynomial.
+And from problem 23-3, we can compute the BST by removing edges starting from the costliest in linear time. Taking a full walk can also easily be done in polynomial time. So overall, this algorithm is polynomial. \\
 
 
 
