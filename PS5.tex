@@ -76,7 +76,7 @@
 %----------------------------------------------------------------------------------------
 
 \section*{Problem 4}
-First, we can call an implementation of Ford-Fulkerson algorithm, the Edmonds-Karp algorithm, as a subroutine to compute a min-cut. As per the Edmonds-Karp algorithm, its time complexity is $O(|V||E|^2)$. \\
+First, we can call an implementation of Ford-Fulkerson algorithm, the Edmonds-Karp algorithm, as a subroutine to compute a min-cut according to the max-flow min-cut theorem. As per the Edmonds-Karp algorithm, its time complexity is $O(|V||E|^2)$. \\
 
 The Ford-Fulkerson algorithm is actually to solve the directed graphs, but we can make our undirected graph directed by introducing two opposing directed edges on every undirected edge. This could essentially require $O(|V|^2)$ calls to the Edmonds-Karp algorithm. And some of the min-cut solutions could be equivalent for the original undirected graph. But effectively, this would not change the time bound that we will discuss later. \\
 
