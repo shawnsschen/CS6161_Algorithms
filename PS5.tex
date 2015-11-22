@@ -72,6 +72,21 @@
 \maketitle % Print the title
 
 %----------------------------------------------------------------------------------------
+%	PROBLEM 4
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 4}
+First, we can call an implementation of Ford-Fulkerson algorithm, the Edmonds-Karp algorithm, as a subroutine to compute a min-cut. As per the Edmonds-Karp algorithm, its time complexity is $O(|V||E|^2)$. \\
+
+The Ford-Fulkerson algorithm is actually to solve the directed graphs, but we can make our undirected graph directed by introducing two opposing directed edges on every undirected edge. This could essentially require $O(|V|^2)$ calls to the Edmonds-Karp algorithm. And some of the min-cut solutions could be equivalent for the original undirected graph. But effectively, this would not change the time bound that we will discuss later. \\
+
+So we could repeatedly call Edmonds-Karp algorithm for each input $(s, t)$ and get a cut $C$ of volume $|C|$. Assume cut $C$ contains edge $e_1, e_2, ... , e_k$. For each $e_i: i \in [k]$, we increase the capacity of $e_i$ by a constant factor $\delta$, and call Edmonds-Karp again to get a new min-cut $C_i$ for it. When iterating over $e_i$, if there exists a $|C_i|=|C|$ and $C_i \neq C$, $C$ is not the unique min-cut. On the other hand, if there exists another min-cut $C'$ other than $C$, there also exists some $e_i \in C, e_i \notin C'$. Changing the capacity of that $e_i$ would not affect $C'$, which still leads to $|C|=|C_i|$. Thus, overall, the graph has a unique min-cut iff $|C| \textless |C_i|$ for all $i$. \\
+
+In the worst case, for each input $(s, t)$, we need to call Edmonds-Karp at most $|E|+1$ times to determine whether the first returned cut $C$ is unique or not. And for the undirected graph, we need to repeat $O(|V|^2)$ times. So eventually, this algorithm takes $O(|E|^3|V|^3)$, which is polynomial.
+
+
+
+%----------------------------------------------------------------------------------------
 %	PROBLEM 5
 %----------------------------------------------------------------------------------------
 
