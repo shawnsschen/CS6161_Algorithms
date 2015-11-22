@@ -82,6 +82,12 @@ The Ford-Fulkerson algorithm is actually to solve the directed graphs, but we ca
 
 So we could repeatedly call Edmonds-Karp algorithm for each input $(s, t)$ and get a cut $C$ of volume $|C|$. Assume cut $C$ contains edge $e_1, e_2, ... , e_k$. For each $e_i: i \in [k]$, we increase the capacity of $e_i$ by a constant factor $\delta$, and call Edmonds-Karp again to get a new min-cut $C_i$ for it. When iterating over $e_i$, if there exists a $|C_i|=|C|$ and $C_i \neq C$, $C$ is not the unique min-cut. On the other hand, if there exists another min-cut $C'$ other than $C$, there also exists some $e_i \in C, e_i \notin C'$. Changing the capacity of that $e_i$ would not affect $C'$, which still leads to $|C|=|C_i|$. Thus, overall, the graph has a unique min-cut iff $|C| \textless |C_i|$ for all $i$. \\
 
+To conclude, our algorithm is: \\
+1. Turning undirected $G$ into a directed $G'$. \\
+2. Enumerate all the possible $(s, t)$ in $G'$ and correspondingly call Edmonds-Karp algorithm. \\
+3. After getting the cut $C$, iterate over all edges in $C$, increase capacity and call Edmonds-Karp. \\
+4. See if $|C| \textless |C_i|$ for all $i$. If so, return $C$. \\
+
 In the worst case, for each input $(s, t)$, we need to call Edmonds-Karp at most $|E|+1$ times to determine whether the first returned cut $C$ is unique or not. And for the undirected graph, we need to repeat $O(|V|^2)$ times. So eventually, this algorithm takes $O(|E|^3|V|^3)$, which is polynomial.
 
 
