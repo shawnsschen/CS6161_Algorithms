@@ -91,6 +91,36 @@ Suppose there is a cycle in G containing k vertices: $v_1, v_2, ... , v_k$. Let 
 
 
 
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 3
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 3}
+Prim's algorithm can be implemented as follows: \\
+For a weighted, undirected graph G = (V, E), \\
+1. Pick a random $v \in V$ and let the vertices set of the MST $S=\{v\}$. \\
+2. Let the MST $T=\emptyset$. \\
+3. While $S \neq V$: \\
+---- 3a. Choose a least-cost edge $e=(u,v)$ such that $u \in S, v \in (V-S)$. \\
+---- 3b. Add $e=(u,v)$ to $T$. \\
+---- 3c. Add $v$ to $S$. \\
+
+As above shows, the algorithm needs to visit all the incident vertices for a vertex in $S$, which could be $|V|$ vertices in the worst case. And it needs to iterate over all vertices in $S$ to find the minimum weighted edge, where $|S| \leq |V|$. Therefore, this algorithm can run with time complexity at most $O(|V|^2)$. \\
+
+Now we need to prove the correctness of Prim's algorithm. This would be done in two parts: (1) Prim's algorithm produces a spanning tree. (2) Prim's algorithm correctly finds an MST. \\
+
+For (1): At every iteration of Prim's algorithm, there must be an edge found that connects a vertex in $S$ to another vertex in $V-S$. Since $G$ itself is connected, there always exists a path to every vertex. And $T$ exists as a tree in $S$. The output of Prim's algorithm thus should be a tree because the vertices added to $S$ are connected and adding connected vertices to a tree still forms a tree. \\
+
+For (2): Let $T$ be the spanning tree produced by Prim's algorithm and $T^*$ be any MST in $G$. We need to prove $c(T)=c(T^*)$ so that T is MST. \\
+If $T=T^*$, it is trivial to see that $c(T)=c(T^*)$. \\
+Otherwise $T \neq T^*$, there is $T-T^* \neq \emptyset$. Let $e=(u,v)$ be any edge in $T-T^*$. When
+$e$ is added to $T$, it must be a least-cost edge crossing some cut $(S, V-S)$. Since $T^*$ is MST, there should also be a path from $u$ to $v$ in $T^*$, which implies there exists a $e'=(x,y)$ crossing the same cut $(S, V-S)$. Because $e$ is a least-cost edge over $(S, V-S)$, there is $c(e) \leq c(e')$. Now define $T^{**}=T^* \cup e - e'$. Note by definition of tree, $T^* \cup e$ could form a cycle. But $e'$ is also on the cycle so that $T^{**}$ is a spanning tree. And there is $c(T^{**})=c(T^*)+c(e)-c(e') \leq c(T^*)$. On the other hand, by definition of MST, there is $c(T^{**}) \geq c(T^*)$. So we conclude $c(T^{**})=c(T^*)$, which indicates $T^{**}$ is MST. Since $e$ is in $T^{**}$ but not $T^*$, we have $|T-T^{**}|=|T-T^*|-1$. If we repeat this operation and add all edges in $T-T^*$, $T^{**}$ eventually becomes $T$. Therefore, $c(T^{**})=c(T)=c(T^*)$, which implies $T$ is MST. \\
+
+
+
+
+
 %----------------------------------------------------------------------------------------
 %	PROBLEM 4
 %----------------------------------------------------------------------------------------
