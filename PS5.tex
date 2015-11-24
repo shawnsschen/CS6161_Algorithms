@@ -72,6 +72,21 @@
 \maketitle % Print the title
 
 %----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 1}
+First, we show that given an algorithm that solves HP, the st-HP can also be solved within an extra polynomial time overhead. For a given graph, assume there is an oracle that gives the yes/no answer to the HP problem in constant time. We can thus construct an algorithm that solves st-HP given a specified pair of start/end points $(s,t)$. We can attach a point $u$ to $s$ with only one edge from $u$ to $s$, and similarly attach $v$ to $t$ with only one edge from $v$ to $t$. We call this new graph including $u,v$ as $G'$. Once we have $G'$, we can call the solver for HP with input $G'$. If the oracle says yes for $G'$, then we know $(s,t)$ must be the end points for $G$ because $(u,v)$ can only be reachable via $s,t$. Otherwise, if the oracle says no, that means even there exists a HP, $(s,t)$ are not the end points, which is not we are looking for. Since attaching two points to $G$ can be done in constant time, the overhead is obviously polynomial. \\
+
+Next, we show that given an algorithm that solves st-HP, the st-S-HP can also be solved within an extra polynomial tme overhead. Since we are already able to solve the st-HP problem, we can recursively find out the path given $(s,t)$. After being confirmed with a yes by the oracle (meaning the HP exists), we remove $(s,t)$ from the graph and thus get a new graph $G^*$. We randomly pick two points $(s^*,t^*) \in V-2$ as the new end points. Then, invoke the st-HP solver again with input $(G^*,s^*,t^*)$. If the oracle says yes, remove $(s^*,t^*)$ and pick two new random points $(s^{**},t^{**}) \in V-4$ and repeat the process again. Otherwise, if the oracle says no, pick another pair of points from $V-2$ and do it again. Eventually, if a HP does exist, we will end up using up all the points and the last call to the solver will just be two points connected by an edge. So after this recursive process, we can get a chain of end points, which is the HP we are looking for. Note that the worst case we could run into is to call the st-HP solver $O(n^2)$ times and get a yes from the last call. And then we go into a nested subgraph and recursively call the st-HP $O(n)$ times until we have a definite path. Overall, this algorithm runs in at most $O(n^3)$ time. \\
+
+Finally, we show that given an algorithm that solves st-S-HP, the S-HP can also be solved within an extra polynomial time overhead. We can start by calling the solver for HP to see if there exists a valid HP. Here we assume there exists such an HP. We now know the solver for st-S-HP returns either a no or an HP for the input implying a yes. Thus, to solve the generic case of S-HP, we can randomly pick two points from $G=(V,E)$ as the end points. Then, call the solver for st-S-HP. If the returning answer is an HP, then we are done. But if it returns a no, we need to choose another pair of end points and call the solver again until we get the HP. It is easy to see that in the worst case, we have to call the subroutine $O(n^2)$ times by covering all possible pairs of end points. So this algorithm runs in polynomial time. \\
+
+To sum up the above, we can solve S-HP by calling the solver for HP within a polynomial time overhead. Thus, we have reduced S-HP to HP.
+
+
+
+%----------------------------------------------------------------------------------------
 %	PROBLEM 2
 %----------------------------------------------------------------------------------------
 
