@@ -1,0 +1,99 @@
+{{AFC submission|t||ts=20151211121923|u=RHaworth|ns=118|demo=}}
+
+In [[computer science]], parallel tree contraction is a broadly applicable technique for the parallel solution of a large number of [[tree]] problems, and is used as an algorithm design technique for the design of
+a large number of parallel [[graph]] algorithms.  Parallel tree contraction was introduced by [[Gary L. Miller]] and [[John H. Reif]] <ref>[[Gary L. Miller]] and [[John H. Reif]], Parallel Tree Contraction--Part I: Fundamentals., 1989</ref>,  and has subsequently been modified to improve efficiency by X. He and Y. Yesha <ref>X. He and Y. Yesha, "Binary tree algebraic computation and parallel algorithms for simple graphs.", Journal of Algorithms, 1988, pp 92-113</ref>, Hillel Gazit, Gary L. Miller and Shang-Hua Teng <ref>Hillel Gazit, Gary L. Miller and Shang-Hua Teng, Optimal tree contraction in the EREW model, Springer, 1988</ref> and many others.
+
+Tree contraction has been used in designing many efficient [[parallel algorithms]], including [[expression]] evaluation, finding [[lowest common ancestors]], tree isomorphism, [[graph isomorphism]], [[maximal subtree isomorphism]], [[common subexpression elimination]], computing the 3-connected components of a graph, and finding an explicit planar embedding of a [[planar graph]] <ref>Gary L. Miller and John H. Reif, Parallel tree contraction and its application, Defense Technical Information Center, 1985</ref>.
+
+Based on the research and work on parallel tree contraction, various algorithms have been proposed targeting to improve the effeciency or simplicity of this topic. This article hereby focuses on a particular solution, which is a variant of the algorithm by Miller and Reif, and its application.
+
+
+
+==Introduction==
+Over the past several decades there has been significant research on deriving new parallel algorithms for a variety of problems, with the goal of designing highly parallel ([[polylogarithmic depth]]), work-efficient (linear in the sequential running time) algorithms <ref>Karl Abrahamson and et al., "A simple parallel tree contraction algorithm.", Journal of Algorithms, 1989, pp 287-302</ref>. For some problems, tree turns out to be a nice solution. Addressing these problems, we can sometimes get more parallelism simply by representing our problem as a tree.
+
+Considering a generic definition of a tree, there is a root vertex, and several child vertices attached to the root. And the child vertices might have children themselves, and so on so forth. Eventually, the paths come down to leaves, which are defined to be the terminal of a tree. Then based on this generic tree, we can further come up with some special cases: (1) [[balanced binary tree]]; (2) [[linked list]]. A balanced binary tree has exactly two branches for each vertex except for leaves. This gives a O(log n) bound on the depth of the tree. A linked list is also a tree where every vertex has only one child. We can also achieve O(log n) depth using [[symmetry breaking]].
+
+Given the general case of a tree, we would like to keep the bound at O(log n) no matter it is unbalanced or list-like or a mix of both. To address this problem, we make use of an algorithm called [[prefix sum]] by using the [[Euler tour technique]]. With the Euler tour technique, a tree could be represented in a flat style, and thus prefix sum could be applied to an arbitrary tree in this format. In fact, prefix sum can be used on any set of values and binary operation which form a group: the binary operation must be associative, every value must have an inverse, and there exists an identity value.
+
+With a bit of thought, we can find some exceptional cases where prefix sum becomes incapable or inefficient. Consider the example of multiplication when the set of values includes 0. Or there are some commonly desired operations are max() and min() which do not have [[inverses]]. The goal is to seek an algorithm which works on all trees, in expected O(n) work and O(log n) depth. In the following sections, a Rake/Compress algorithm will be proposed to fulfill this goal.
+
+==Definitions==
+
+[[File:Rake-1.png|480*360px|thumbnail|right|Fig. 1: Rake Operation]]
+[[File:Compress-1.png|480*360px|thumbnail|right|Fig. 2: Compress Operation]]
+Before going into the algorithm itself, we first look at a few terminologies that will be used later.
+
+* '''Rake''' – Rake step joins every left leaf of binary nodes to the parent. By join, we mean that it undergoes a functional process which achieves the operation we want to make. An example of rake is given in Figure 1.
+
+* '''Compress''' – Compress step is actually a sequence of several events: (1) Find an independent set of unary nodes. (Independence here is defined such that no two are neighbors, meaning no parent to child relation) (2) Join each node in indepedent set with it’s child (Note that independent set is not unique). An example of compress is given in Figure 2.
+
+
+And in order to solve actual problems using tree contraction, the algorithm has a structure:
+
+<source>
+Repeat until tree becomes a unary node
+{
+    Rake;
+    Compress;
+}
+</source>
+
+==Analysis==
+For the moment, let us assume that all nodes have less than three children, namely binary. Generally speaking, as long as the degree is bounded, the bounds will hold. But we will analyze the binary case for simplicity. In the two “degenerate” cases listed above, the rake is the best tool for dealing with balanced binary trees, and compress is the best for linked lists. However, arbitrary trees will have to require a combination of these operations. By this combination, we claim a theorem that
+* '''Theorem''': After O(log n) expected rake and compress steps, a tree is reduced to a single node.
+Now rephrase the tree contraction algorithm as follows:
+* Input: A binary tree rooted at r
+* Output: A single node
+* Operation:  A sequence of contraction steps, each consisting of a rake operation and a compress operation (in any order). The rake operation removes all the leaf nodes in parallel. The compress operation finds an [[independent set]] of unary nodes and splice out the selected nodes.
+To approach the theorem, we first take a look at a property of a binary tree. Given a binary tree T, we can partition the nodes of T into 3 groups: T0 contains all leaf nodes, T1 contains all nodes with 1 child, and T2 contains all nodes with 2 children. It is easy to see that: <math>V(T) = T0  \cup T1 \cup T2</math>. Now we propose:
+* Claim: <math>|T0| = |T2|  + 1</math>
+This claim can be proved by strong induction on the number of nodes. It is easy to see that the base case of n=1 trivially holds. And we further assume the claim also holds for any tree with at most n nodes. Then given a tree with n+1 nodes rooted at r, there appears to be two cases:
+(1) If r has only one subtree, consider the subtree of r. We know that the subtree has the same number of binary nodes and the same number of leaf nodes as the whole tree itself. This is true since the root is a unary node. And based the previous assumption, a unary node does not change either T0 or T2.
+(2) If r has two subtrees, we define T0<sup>L</sup>, T2<sup>L</sup> to be the leaf nodes and binary nodes in the left subtree, respectively. Similarly, we define the same T0<sup>R</sup>, T2<sup>R</sup> for the right subtree. From previous, there is <math>|T0^L| = |T2^L| + 1</math> and <math>|T0^R| = |T2^R| + 1</math>. Also we know that T has <math>|T0^L| + |T0^R|</math> leaf nodes and <math>|T2^L| + |T2^R| + 1</math> binary nodes. Thus, we can derive:
+
+<math>|T0^L| + |T0^R| = |T2^L| + 1 + |T2^R| + 1 = (|T2^L| + |T2^R| + 1) + 1</math>
+
+which proves the claim.
+
+Following the claim, we then prove a lemma, which leads us to the theorem.
+* Lemma: The number of nodes of after a contraction step is reduced by a constant factor in expectation.
+Assume the number of nodes before the contraction to be m, and m' after the contraction. By definition, the rake operation deletes all T0 and the compress operation deletes at least 1/4 of T1 in expectation. All T2 remains. Therefore, we can see:
+
+<math>E[m'] \leq |T2| + \tfrac{3}{4}*|T1| \leq \tfrac{3}{4} + \tfrac{3}{4}*|T1| + \tfrac{3}{2}*|T2| = \tfrac{3}{4}(1 + |T1| + 2*|T2|) = \tfrac{3}{4}(|T0| + |T1| + |T2|) = \tfrac{3}{4}m</math>
+
+Finally, based on this lemma, we can conclude that if the nodes are reduced by a constant factor in each iteration, after O(log n), there will be only one node left.
+
+==Applications==
+
+===Expression Evaluation===
+To evaluate an expression given as a binary tree (this problem also known as [[binary expression tree]]), consider that:
+An arithmetic expression is a tree where the leaves have values from some domain and each internal vertex has two children and a label from {+, x, %}. And further assume that these binary operations can be performed in constant time. 
+
+We now show the evaluation can be done with parallel tree contraction.
+* Step 1. Assign expressions to every node. The expression of a leaf is simply the value that it contains. Write L + R, L − R, or L × R for the operators, where L and R are the values of the expressions in the left and right subtrees, respectively.
+* Step 2. When a left (right) child with 0 children is merged into an operator, replace L (R) with the value of the child.
+* Step 3. When a node has 1 child, it has an expression that is a function of one variable. When a left (right) child with 1 child is merged into an operator, replace L (R) with the expression and change the variable in the expression to L (R) if appropriate.
+
+In a node with 2 children, the operands in the expression are f(L) and g(R), where f and g are linear functions, and in a node with 1 child, the expression is h(x), where h is a linear function and x is either L or R. We prove this invariant by induction. At the beginning, the invariant is clearly satisfied. There are three types of merges that result in a not fully evaluated expression. (1) A 1-child node is merged into a 2-children node. (2) A leaf is merged into a 2-children node. (3) A 1-child node is merged into a 1-child node. All three types of merges do not change the invariant. Therefore, every merge simply evaluates or composes linear functions, which takes constant time.
+
+==References==
+{{Reflist}}
+{{refbegin}}
+* [[Donald Knuth]]. ''[[The Art of Computer Programming]]: Fundamental Algorithms'', Third Edition. Addison-Wesley, 1997. ISBN 0-201-89683-4 . Section 2.3: Trees, pp.&nbsp;308–423.
+* [[Thomas H. Cormen]], [[Charles E. Leiserson]], [[Ronald L. Rivest]], and [[Clifford Stein]]. ''[[Introduction to Algorithms]]'', Second Edition. MIT Press and McGraw-Hill, 2001. ISBN 0-262-03293-7 . Section 10.4: Representing rooted trees, pp.&nbsp;214–217. Chapters 12–14 (Binary Search Trees, Red-Black Trees, Augmenting Data Structures), pp.&nbsp;253–320.
+{{refend}}
+
+==External links==
+{{Commons category|Tree structures}}
+* [http://math.mit.edu/~rpeng/18434/applicationsParallelTreeContraction.pdf Applications of Parallel Tree Contraction] by Samuel Yeom
+* [http://courses.csail.mit.edu/6.851/spring07/scribe/lec05.pdf 6.851: Advanced Data Structures] by Prof. Erik Demaine
+* [https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/scribe/lec8/lecture8.pdf Parallel Algorithms] by Guy Blelloch
+
+{{CS-Trees}}
+
+[[Category:Knowledge representation]]
+
+[[de:Baum (Graphentheorie)]]
+
+{{AFC submission|||ts=20151213032123|u=0x000fff|ns=118}}
